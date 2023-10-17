@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class SnailClimb {
+
+    public static int calculateHours(int height, int climbRate, int slideRate) {
+        int totalDistanceClimbed = 0;
+        int hours = 0;
+
+        while (totalDistanceClimbed < height) {
+            hours++;
+            totalDistanceClimbed += climbRate;
+
+            if (totalDistanceClimbed >= height) {
+                return hours;
+            }
+
+            totalDistanceClimbed -= slideRate;
+        }
+
+        return hours;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the height of the wall in feet: ");
+        int height = scanner.nextInt();
+
+        System.out.print("Enter the climbing speed per hour in feet: ");
+        int climbRate = scanner.nextInt();
+
+        System.out.print("Enter the sliding speed per hour in feet: ");
+        int slideRate = scanner.nextInt();
+
+        int hoursToReachTop = calculateHours(height, climbRate, slideRate);
+
+        System.out.println("Hours taken to reach and stay at the top: " + hoursToReachTop);
+    }
+}
