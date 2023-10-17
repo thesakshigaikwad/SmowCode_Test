@@ -1,0 +1,54 @@
+import java.util.Scanner;
+
+public class minSwaps {
+
+    public static int minSwapsToGroupZerosAndOnes(int[] arr) {
+        int countZeros = 0;
+        int swaps = 0;
+
+        for (int i : arr) {
+            if (i == 0) {
+                countZeros++;
+            }
+        }
+
+        int windowZeros = 0;
+        for (int i = 0; i < countZeros; i++) {
+            if (arr[i] == 0) {
+                windowZeros++;
+            }
+        }
+
+        swaps = windowZeros;
+
+        for (int i = countZeros; i < arr.length; i++) {
+            if (arr[i] == 0) {
+                windowZeros++;
+            }
+
+            if (arr[i - countZeros] == 0) {
+                windowZeros--;
+            }
+
+            swaps = Math.min(swaps, windowZeros);
+        }
+
+        return swaps;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of elements in the array : ");
+        int n = scanner.nextInt();
+
+        int[] arr = new int[n];
+        System.out.println("Enter the elements of the array (0 or 1)):");
+        for (int i = 0; i < n; i++) {
+            arr[i] = scanner.nextInt();
+        }
+
+        int minSwaps = minSwapsToGroupZerosAndOnes(arr);
+        System.out.println("Minimum swaps to group 0s and 1s: " + minSwaps);
+    }
+}
