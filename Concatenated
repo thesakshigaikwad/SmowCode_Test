@@ -1,0 +1,74 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+public class TextFileProcessor {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the path to the input data file: ");
+        String filePath = scanner.nextLine();
+
+        System.out.print("Enter a list of input keys (comma-separated, e.g., 5,7,10,23): ");
+        String keysInput = scanner.nextLine();
+
+        List<Integer> inputKeys = parseInputKeys(keysInput);
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                processLine(line, inputKeys);
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading the file: " + e.getMessage());
+        }
+    }
+
+    private static List<Integer> parseInputKeys(String keysInput) {
+        List<Integer> inputKeys = new ArrayList<>();
+        String[] keysArray = keysInput.split(",");
+        for (String key : keysArray) {
+            inputKeys.add(Integer.parseInt(key.trim()));
+        }
+        return inputKeys;
+    }
+
+    private static void processLine(String line, List<Integer> inputKeys) {
+        String[] keyValuePairs = line.split(";");
+        Map<Integer, String> keyToValue = new HashMap<>();
+
+        for (String pair : keyValuePairs) {
+            String[] parts = pair.split("=");
+            if (parts.length == 2) {
+                int key = Integer.parseInt(parts[0].trim());
+                String value = parts[1].trim();
+                keyToValue.put(key, value);
+            }
+        }
+
+        StringBuilder concatenatedString = new StringBuilder();
+        int count = 0;
+
+        for (Integer key : inputKeys) {
+            if (keyToValue.containsKey(key)) {
+                if (concatenatedString.length() > 0) {
+                    concatenatedString.append("|");
+                }
+                concatenatedString.append(keyToValue.get(key));
+                count++;
+            }
+        }
+
+        System.out.println("Concatenated String: " + concatenatedString.toString() + ", Count: " + count);
+    }
+}
